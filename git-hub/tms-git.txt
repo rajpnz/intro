@@ -1,0 +1,17 @@
+Set Up Git Server
+
+1) Set up Github Account (private)
+2) Ask Xing, Ken, And Steven Liu to join
+3) Set up private repositories (tms-infrastructure, tms-salt, tms-cloud-formation) - Discuss 
+4) Get credit card off Daniel 
+5) Set up TMS Admin email (AWS, GIT, etc....) 
+
+
+Tutorials 
+GIT Client
+Documentation 
+Links 
+
+
+
+Other - Show Photos
