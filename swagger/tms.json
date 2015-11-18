@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is the REST API documentation for the TMS 105 (terminal management system)",
+        "description": "This is the REST API documentation for the TMS 107 (terminal management system)",
         "version": "1.0.0",
         "title": "Invenco Cloud Services",
         "termsOfService": "http://www.invenco.com/products/terminal-management-system/"
