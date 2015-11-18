@@ -1,0 +1,282 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is the REST API documentation for the TMS 88 (terminal management system)",
+        "version": "1.0.0",
+        "title": "Invenco Cloud Services",
+        "termsOfService": "http://www.invenco.com/products/terminal-management-system/"
+    },
+    "host": "invenco-nz-test.tms.invenco.com",
+    "schemes": [
+        "https"
+    ],
+    "basePath": "/rest",
+    "tags": [
+        {
+            "name": "targets",
+            "description": "API to manage target (terminal) devices"
+        }
+    ],
+    "paths": {
+        "/targets/{id}": {
+            "get": {
+                "tags": [
+                    "targets"
+                ],
+                "summary": "Find a target by its target id",
+                "description": "Returns a single target",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The target id of the device",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "X-Auth-Token",
+                        "in": "header",
+                        "description": "The JWT authorization token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Target successfully found",
+                        "schema": {
+                            "$ref": "#/definitions/Target"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/targets/{id}/configurationfiles": {
+            "get": {
+                "tags": [
+                    "targets"
+                ],
+                "summary": "Get a list of configuration file references for a target",
+                "description": "Get a list of configuration file references for a target. The reference will have pointer to configuration file name. We suggest that the \"filter\" query parameter is used. This api is used by the UI application",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The target id of the device",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "X-Auth-Token",
+                        "in": "header",
+                        "description": "The JWT authorization token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "The filter will cut down the data populated in the resource",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "UI"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Configuration files successfully listed",
+                        "schema": {
+                            "$ref": "#/definitions/ConfigFileItems"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/targets/{id}/configurationfiles/{fileId}/content": {
+            "get": {
+                "tags": [
+                    "targets"
+                ],
+                "summary": "Get the content of a file for a given target and fileId",
+                "description": "Will be used on the UI to display the content of a configuration file",
+                "produces": [
+                    "text/plain"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The target id of the device",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "fileId",
+                        "in": "path",
+                        "description": "The id of the configuration file",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "X-Auth-Token",
+                        "in": "header",
+                        "description": "The JWT authorization token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Content of file was downloaded"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/targets": {
+            "post": {
+                "tags": [
+                    "targets"
+                ],
+                "summary": "Creates a new target resource (target device)",
+                "description": "Creates a new target resource",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-Auth-Token",
+                        "in": "header",
+                        "description": "The JWT authorization token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Simple target object that will be added",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/TargetCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A new target has been created",
+                        "schema": {
+                            "$ref": "#/definitions/Target"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorMessage"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication Failed. Check token"
+                    },
+                    "404": {
+                        "description": "Not found. Wrong url. Invalid product/site id"
+                    },
+                    "405": {
+                        "description": "Wrong method. Must use POST"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Target": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "productType": {
+                    "type": "string"
+                },
+                "serialNumber": {
+                    "type": "string",
+                    "description": "Serial Number of the OPT"
+                },
+                "lastContact": {
+                    "type": "integer",
+                    "description": "Number of milliseconds since 1970"
+                },
+                "lastRegistered": {
+                    "type": "integer",
+                    "description": "Number of milliseconds since 1970"
+                }
+            }
+        },
+        "TargetCreate": {
+            "type": "object",
+            "properties": {
+                "productTypeId": {
+                    "type": "integer"
+                },
+                "serialNumber": {
+                    "type": "string"
+                },
+                "siteId": {
+                    "type": "string",
+                    "description": "The id of the site that the Target will be added to"
+                }
+            }
+        },
+        "ErrorMessage": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "description": "The error code for the message"
+                },
+                "message": {
+                    "type": "string",
+                    "description": "The error message"
+                }
+            }
+        },
+        "ConfigFileItems": {
+            "type": "object",
+            "properties": {
+                "configFileReference": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ConfigFileReference"
+                    }
+                }
+            }
+        },
+        "ConfigFileReference": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "description": "The name of the configuration file"
+                }
+            }
+        }
+    }
+}
